@@ -1,0 +1,20 @@
+cl-tap-producerX (latest as of 20 Jan 2010)
+-----------------------------------------
+
+  This work is licensed under the MIT (X11) License.
+
+  cl-tap-producerX is a simple testing framework which produces test results in the Test Anything Protocol (TAP) format. It is not yet very mature but provides basic functionality. The most common usage is to print the TAP output to standard output, for use with tools such as the Perl prove utility.
+
+Dependencies
+  cl-tap-producerX has no external dependencies.
+
+  This module has only been tested on GNU CLISP.
+
+Usage
+  cl-tap-producerX consists of two main subsystems: a test framework (unit-test-framework.lisp) and a set of utilities for exporting test results in the TAP format (cl-tap-producer.lisp). The file cl-tap-framework.lisp is provided for convenience and will load both into their own namespace as well as setting the TAP formatter as the default test formatter. The easiest way to get started with cl-tap-producerX is to load ASDF (for the dependency on split-sequence), then load cl-tap-framework.lisp.
+
+  There are two main ways of using cl-tap-producerX's unit test framework. One is to use deftest forms, as described in Practical Common Lisp. In this case, executing the test function will return a list of test result structures. Those test result structures can be passed to structured-test-list->tap to produce the TAP output as a string, or to print-test-list to print to standard output directly. Some additional testing facilities are provided beyond those described in Practical Common Lisp - please see unit-test-framework.lisp for the specific facilities available.
+
+  The other method is to use test expressions directly. If test expresions are evaluated outside the context of a deftest form, the result will be printed to standard output automatically. If you use this method, you may also wish to call print-test-plan at the end of all testing to print the test plan to standard output. The test plan is not required as part of the TAP standard but many TAP consumers, including prove, behave better if it is present.
+
+  See example.test.lisp, arithmetic.test.lisp, unit-test-framework.test.lisp and cl-tap-producer.test.lisp for usage examples.
