@@ -1,4 +1,4 @@
-(require "split-sequence.lisp")
+(load "split-sequence.lisp")
 
 ; a structured-test is a plist. The following properties are recognized:
 ; test-name: The name or description of the test.

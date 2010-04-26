@@ -50,16 +50,6 @@
     (format T "~a~&" (funcall *report-func* test-result)))
   test-result)
 
-;; is: any any &optional string -> structured-test
-;; purpose: consumes two values of any type and returns a structured-test. The test is
-;; passed if the values are equal, otherwise the test is failed. Optionally, a test name
-;; can be supplied for the resulting structured-test.
-;(defun is (valA valB &optional (test-name NIL))
-;  (report-immediately-if-at-top-level
-;   (if test-name
-;    `(:test-name ,test-name :test-passed ,(equalp valA valB) :test-value ,valA :expected-value ,valB)
-;    `(:test-passed ,(equalp valA valB) :test-value ,valA :expected-value ,valB))))
-
 ; is: any any (symbol any)* -> structured-test
 ; purpose: consumes two values of any type and returns a structured-test. The test is
 ; passed if the values are equal, otherwise the test is failed. Optionally, any number

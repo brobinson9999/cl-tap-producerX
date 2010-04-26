@@ -1,7 +1,10 @@
-Miscellaneous Bug Fixes and Tweaks
+26 Apr 2010 (and earlier)
+- No longer loads split-sequence via ASDF - just loads the .lisp file directly.
 
-Additional plist key/value pairs can now be specified when using is. This allows a test name to be set manually. 
+- Miscellaneous Bug Fixes and Tweaks
 
-The comparison function used to test for equality can now be specified using the structured-test properties :compare-sym and :compare-fun.
+- Additional plist key/value pairs can now be specified when using is. This allows a test name to be set manually.
 
-Changed to always indent diagnostic lines, rather than only indenting them if they aren't already indented. This better preserves indentation in the diagnostic data itself. The presentation of multi-line values for YAMLish attributes can probably still be improved further.
+- The comparison function used to test for equality can now be specified using the structured-test properties :compare-sym and :compare-fun.
+
+- Changed to always indent diagnostic lines, rather than only indenting them if they aren't already indented. This better preserves indentation in the diagnostic data itself. The presentation of multi-line values for YAMLish attributes can probably still be improved further.
