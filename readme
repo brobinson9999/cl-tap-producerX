@@ -2,6 +2,8 @@ cl-tap-producerX (latest as of 26 Apr 2010)
 -------------------------------------------
 
   This work is licensed under the MIT (X11) License.
+  The latest code from this project should be available at:
+  http://github.com/brobinson9999/cl-tap-producerX
 
   cl-tap-producerX is a simple testing framework which produces test results in the Test Anything Protocol (TAP) format. It is not yet very mature but provides basic functionality. The most common usage is to print the TAP output to standard output, for use with tools such as the Perl prove utility.
 
