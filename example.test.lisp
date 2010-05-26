@@ -10,4 +10,7 @@
 (is (fib 5) 5)
 (is (fib 6) 8)
 
+(is-condition (fib 6) NIL)
+(is-condition (error 'error) (make-instance 'error))
+
 (print-test-plan)

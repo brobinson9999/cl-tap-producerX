@@ -12,4 +12,5 @@
 	   :check
 	   :combine-results
 	   :deftest
-	   :is))
+	   :is
+	   :is-condition))
