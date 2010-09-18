@@ -42,17 +42,17 @@ its life time, otherwise false.")
     t))
 
 (declaim (inline object-sequence= object-vector=))
-(defun object-sequence= (xs ys)
+(defun object-sequence= (xs ys &optional frozenp)
   "Checks whether sequences XS and YS are element-wise equivalent,
 by means of OBJECT=, and of the same length."
   (and (= (length xs) (length ys))
-       (every #'object= xs ys)))
+       (every (lambda (x y) (object= x y frozenp)) xs ys)))
 
-(defun object-vector= (xs ys)
+(defun object-vector= (xs ys &optional frozenp)
   "Checks whether vectors XS and YS are element-wise equivalent,
 by means of OBJECT=, and of the same length.
 Use OBJECT-SEQUENCE= instead."
-  (object-sequence= xs ys))
+  (object-sequence= xs ys frozenp))
 
 (defun object= (x y &optional frozenp)
   "Returns true if X and Y are (observationally) equivalent.
@@ -87,7 +87,7 @@ See also: <http://home.pipeline.com/~hbaker1/ObjectIdentity.html>"
                ((stringp x)
                 (and (stringp y) frozenp (string= x y)))
                ((vectorp x)
-                (and (vectorp y) frozenp (object-vector= x y)))
+                (and (vectorp y) frozenp (object-vector= x y frozenp)))
                ((bit-vector-p x)
                 (and frozenp (equal x y)))
                ((not (equal (type-of x) (type-of y))) nil)

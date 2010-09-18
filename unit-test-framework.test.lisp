@@ -1,4 +1,4 @@
-#!/usr/local/bin/clisp
+#!/usr/bin/clisp
 
 (require "cl-tap-framework.lisp")
 
@@ -32,6 +32,7 @@
     `((:test-name NIL :raw-test (is-func 1 1) :test-passed T :test-value 1 :expected-value 1)
       (:test-name NIL :raw-test (is-func 2 2) :test-passed T :test-value 2 :expected-value 2)))
 
+; test :compare-sym and :compare-fun
 (defun always-true (dummy-a dummy-b) T)
 (is 5 6 :compare-sym 'always-true)
 (is 5 6 :compare-fun (lambda (x y) T))

@@ -1,4 +1,4 @@
-#!/usr/local/bin/clisp
+#!/usr/bin/clisp
 
 ;(require "example.lisp")
 (require "cl-tap-framework.lisp")
