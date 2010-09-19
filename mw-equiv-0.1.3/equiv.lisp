@@ -44,13 +44,15 @@ its life time, otherwise false.")
 (declaim (inline object-sequence= object-vector=))
 (defun object-sequence= (xs ys &optional frozenp)
   "Checks whether sequences XS and YS are element-wise equivalent,
-by means of OBJECT=, and of the same length."
+by means of OBJECT=, and of the same length. If FROZENP is specified,
+it will be passed to OBJECT= for each element."
   (and (= (length xs) (length ys))
        (every (lambda (x y) (object= x y frozenp)) xs ys)))
 
 (defun object-vector= (xs ys &optional frozenp)
   "Checks whether vectors XS and YS are element-wise equivalent,
-by means of OBJECT=, and of the same length.
+by means of OBJECT=, and of the same length.  If FROZENP is specified,
+it will be passed to OBJECT= for each element.
 Use OBJECT-SEQUENCE= instead."
   (object-sequence= xs ys frozenp))
 
