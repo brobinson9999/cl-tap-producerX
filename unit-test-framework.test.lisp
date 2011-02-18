@@ -55,4 +55,34 @@
 (is-condition (+ 1 3) NIL)
 (is-condition (error 'error) (make-condition 'error))
 
+(is (macroexpand-1 '(test-helper-call foo bar baz))
+    '(foo bar baz :raw-test (foo bar baz)))
+
+; what if :raw-test is already specified?
+(is (macroexpand-1 '(test-helper-call foo bar baz))
+    '(foo bar baz :raw-test (foo bar baz)))
+
+; bring in pattern-match so that we can match the gensyms
+(require "pattern-match.lisp")
+
+(is (macroexpand-1 '(def-test-helper foo (bar) baz test))
+    '(progn
+      (defmacro foo (bar)
+        (test-helper-call ?gensym (bar) baz test))
+      (defun ?gensym (bar &key (raw-test NIL))
+        baz
+        test))
+    :compare-sym 'match)
+
+(is (macroexpand-1 '(def-test-helper foo (bar &key (nub NIL)) baz test))
+    '(progn
+      (defmacro foo (bar &key (nub NIL))
+        (test-helper-call ?gensym (bar &key (nub NIL)) baz test))
+      (defun ?gensym (bar &key (nub NIL) (raw-test NIL))
+        baz
+        test))
+    :compare-sym 'match)
+
+; needs more testing, and probably doesn't work on cases with &rest
+
 (print-test-plan)

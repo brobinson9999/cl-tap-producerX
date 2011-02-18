@@ -81,7 +81,6 @@
 	((getf plist-rest :compare-fun) (funcall (getf plist-rest :compare-fun) valA valB))
 	(T (check-equivalence valA valB))))
 
-
 (defun check-equivalence (x y)
   (equiv:object= x y T))
 
@@ -107,3 +106,27 @@
 				      (add-to-plist-if-nonexistent :raw-test `'(is-condition ,valA ,valB ,@plist-rest)
 								   plist-rest))))
     `(is (capture-condition ,valA) ,valB ,@modified-plist)))
+
+; test-helper-call: any* -> any
+; purpose: generates a list form containing the body of the macro call,
+; with an added keyword parameter raw-test containing the body of the
+; list form, excluding that additional parameter.
+; example: (test-helper-call foo bar baz) -> (foo bar baz :raw-test '(foo bar baz))
+(defmacro test-helper-call (&rest body)
+  (append body (list :raw-test body)))
+
+; def-test-helper: symbol (listof argument) any* -> macro-definition
+; purpose: declares a function to be a test helper. Behaves similar to
+; defun, but behind the scenes creates a macro instead which will call
+; an inner function which has the behavior of the original function, but
+; takes an additional raw-test keyword parameter.
+(defmacro def-test-helper (name parameter-list &rest body)
+  (let ((gen-name (gensym)))
+    `(progn
+       (defmacro ,name ,parameter-list
+         (test-helper-call ,gen-name ,@parameter-list))
+
+       (defun ,gen-name ,(append parameter-list
+                             (if (member '&key parameter-list) NIL (list '&key))
+                             (list '(raw-test NIL)))
+         ,@body))))
