@@ -13,4 +13,5 @@
 	   :combine-results
 	   :deftest
 	   :is
-	   :is-condition))
+	   :is-condition
+	   :compare-plists))

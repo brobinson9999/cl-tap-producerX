@@ -4,6 +4,23 @@
 ; *test-name* maintains a stack of deftest names to give the "path" to the currently running test when deftest is being used
 (defvar *test-name* NIL)
 
+; compare-plists: plist plist -> boolean
+; purpose: returns T if the two plists are equivalent. We can't just use equalp to compare the lists
+; because the key-value pairs could occur in a different order, or one could contain an explicit
+; NIL while the other does not contain that key, so getf would return a NIL in either case. These
+; should also be considered equivalent.
+(defun compare-plists (plist-1 plist-2)
+  (let ((combined-property-list (merge 'list (get-plist-keys plist-1) (get-plist-keys plist-2) #'eql)))
+    (loop for property in combined-property-list
+      when (not (equalp (getf plist-1 property) (getf plist-2 property))) do (return-from compare-plists NIL)))
+
+  T)
+
+; get-plist-keys: plist -> (listof symbol)
+; purpose: produces the list of keys that appear in the given plist.
+(defun get-plist-keys (plist)
+  (loop for property in plist by #'cddr collecting property))
+
 ; add-to-plist-if-nonexistent: symbol any plist -> plist
 ; purpose: consumes a plist, a symbol, and a value and produces the plist with the symbol/value
 ; pair added, iff that symbol was not already a key in the plist. If the symbol was already a key

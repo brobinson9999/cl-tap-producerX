@@ -12,6 +12,13 @@
 (is (add-to-plist-if-nonexistent :a 'b '(:a d)) '(:a d))
 (is (add-to-plist-if-nonexistent :a 'b '(:c d :a NIL)) '(:c d :a NIL))
 
+(is (compare-plists '(:a 1 :b 2) '(:a 1 :b 2)) T)
+(is (compare-plists '(:b 2 :a 1) '(:a 1 :b 2)) T)
+(is (compare-plists '(:b 2 :a 1 :c NIL) '(:a 1 :b 2)) T)
+(is (compare-plists '(:b 2 :a 1) '(:a 1 :b 2 :c NIL)) T)
+(is (compare-plists '(:b 2 :a 1) '(:a 1 :b 2 :c 42)) NIL)
+(is (compare-plists '(:b 2 :a 1 :c 12) '(:a 1 :b 2 :c 42)) NIL)
+
 (is (is-func NIL NIL) `(:test-passed T :test-value NIL :expected-value NIL))
 (is (is-func 5 5) `(:test-passed T :test-value 5 :expected-value 5))
 (is (is-func "5" "5") `(:test-passed T :test-value "5" :expected-value "5"))
@@ -68,16 +75,17 @@
 (is (macroexpand-1 '(def-test-helper foo (bar) baz test))
     '(progn
       (defmacro foo (bar)
-        (test-helper-call ?gensym (bar) baz test))
+        (test-helper-call ?gensym bar))
       (defun ?gensym (bar &key (raw-test NIL))
         baz
         test))
     :compare-sym 'match)
 
+; this case still does not work
 (is (macroexpand-1 '(def-test-helper foo (bar &key (nub NIL)) baz test))
     '(progn
       (defmacro foo (bar &key (nub NIL))
-        (test-helper-call ?gensym (bar &key (nub NIL)) baz test))
+        (test-helper-call ?gensym bar :nub nub))
       (defun ?gensym (bar &key (nub NIL) (raw-test NIL))
         baz
         test))
