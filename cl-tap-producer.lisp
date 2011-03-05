@@ -74,7 +74,7 @@
 ; whitespace character on each line. Lines containing no non-whitespace characters still get
 ; the whitespace prefix.
 (defun start-all-lines-with-whitespace (input-text &key (always-add-whitespace NIL))
-  (format NIL "~{~a~^~&~}"
+  (format NIL "~{~a~^~%~}"
     (loop for line in (split-sequence:split-sequence #\Newline input-text)
 	  collecting (start-line-with-whitespace line 2 :always-add-whitespace always-add-whitespace))))
   

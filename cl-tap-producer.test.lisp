@@ -34,11 +34,13 @@
 
    (is (start-all-lines-with-whitespace "") "  ")
    (is (start-all-lines-with-whitespace
-	    (format NIL "line1~&line2")) (format NIL "  line1~&  line2"))
+	    (format NIL "line1~%line2")) (format NIL "  line1~%  line2"))
    (is (start-all-lines-with-whitespace
-	    (format NIL "  line1~&   line2")) (format NIL "  line1~&   line2"))
+	    (format NIL "  line1~%   line2")) (format NIL "  line1~%   line2"))
    (is (start-all-lines-with-whitespace
-	    (format NIL "    line1~&line2")) (format NIL "    line1~&  line2"))
+	    (format NIL "    line1~%line2")) (format NIL "    line1~%  line2"))
+   (is (start-all-lines-with-whitespace
+	    (format NIL "    line1~%~%line3")) (format NIL "    line1~%  ~%  line3"))
 
    (is (plist-contains-p '(:test "value") :test) T)
    (is (plist-contains-p '(:rest "value" :test "value") :test) T)
