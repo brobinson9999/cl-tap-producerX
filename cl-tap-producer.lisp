@@ -75,8 +75,12 @@
 ; the whitespace prefix.
 (defun start-all-lines-with-whitespace (input-text &key (always-add-whitespace NIL))
   (format NIL "~{~a~^~%~}"
-    (loop for line in (split-sequence:split-sequence #\Newline input-text)
-	  collecting (start-line-with-whitespace line 2 :always-add-whitespace always-add-whitespace))))
+	  (map 'list (lambda (line)
+		       (start-line-with-whitespace line 2 :always-add-whitespace always-add-whitespace)) (split-sequence:split-sequence #\Newline input-text))))
+;(defun start-all-lines-with-whitespace (input-text &key (always-add-whitespace NIL))
+;  (format NIL "~{~a~^~%~}"
+;    (loop for line in (split-sequence:split-sequence #\Newline input-text)
+;	  collecting (start-line-with-whitespace line 2 :always-add-whitespace always-add-whitespace))))
   
 ; start-line-with-whitespace: string nat -> string
 ; purpose: produces a string equal to the input string, with at least whitespace-quantity
