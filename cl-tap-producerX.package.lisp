@@ -14,4 +14,5 @@
 	   :deftest
 	   :is
 	   :is-condition
+	   :capture-condition
 	   :compare-plists))

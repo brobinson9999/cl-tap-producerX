@@ -87,8 +87,27 @@ purpose: compares two values for equivalence, using equiv:object=."
 
 (defmethod equiv:object-constituents ((anysymbol symbol))
   "equiv:object-constituents: symbol -> (listof (any -> any))
-purpose: consumes a symbol (representing the type of the object?) and produces a list of functions whose results must be equivalent when run against two different objects, in order for the two objects to be considered equivalent."
+purpose: consumes a symbol (representing the type of the object?) and produces a list of functions whose results must be equivalent when run against two different objects, in order for the two objects to be considered equivalent. (most general case, works for any type, and only compares the type.)"
+  (format T "equiv:object-constituents on: ~S" anysymbol)
   (load-time-value (list #'type-of)))
+
+(defmacro defequivs (&rest equiv-entries)
+  "defequivs: (list (listof symbol) (listof (any -> any)))* -> defmethods
+purpose: defines methods for equiv:object-constituents. Each equiv entry consists of a list of symbols for the types covered by that equiv entry, followed by a list of functions used for comparing instances of those types."
+  `(progn
+     ,@(reduce #'append
+	       (map 'list
+		    (lambda (equiv-entry)
+		      (map 'list
+			   (lambda (entry-symbol)
+			     `(defmethod equiv:object-constituents ((type (eql ,entry-symbol)))
+				(load-time-value ,(second equiv-entry))))
+			   (first equiv-entry)))
+		    equiv-entries))))
+
+(defequivs
+    (('error) (list #'type-of))
+    (('simple-error) (list #'type-of (lambda (x) (format NIL "~a" x)))))
 
 (defmacro capture-condition (&body forms)
   "capture-condition: any* -> condition

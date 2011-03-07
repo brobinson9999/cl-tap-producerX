@@ -7,6 +7,27 @@
 ; I will just set the cl-tap-producerX as the current package for convenience.
 (in-package :cl-tap-producerX)
 
+(is (macroexpand-1 '(defequivs
+		     (('error 'simple-error) (list #'type-of #'describe))))
+    '(progn
+      (defmethod equiv:object-constituents ((type (eql 'error)))
+	(load-time-value (list #'type-of #'describe)))
+      (defmethod equiv:object-constituents ((type (eql 'simple-error)))
+	(load-time-value (list #'type-of #'describe)))))
+
+(is (macroexpand-1 '(defequivs
+		     (('error 'simple-error) (list #'type-of #'describe))
+		     (('thing 'amajig) (list #'magic-comparison))))
+    '(progn
+      (defmethod equiv:object-constituents ((type (eql 'error)))
+	(load-time-value (list #'type-of #'describe)))
+      (defmethod equiv:object-constituents ((type (eql 'simple-error)))
+	(load-time-value (list #'type-of #'describe)))
+      (defmethod equiv:object-constituents ((type (eql 'thing)))
+	(load-time-value (list #'magic-comparison)))
+      (defmethod equiv:object-constituents ((type (eql 'amajig)))
+	(load-time-value (list #'magic-comparison)))))
+
 (is (add-to-plist-if-nonexistent :a 'b '()) '(:a b))
 (is (add-to-plist-if-nonexistent :a 'b '(:c d)) '(:a b :c d))
 (is (add-to-plist-if-nonexistent :a 'b '(:a d)) '(:a d))
