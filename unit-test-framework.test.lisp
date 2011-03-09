@@ -83,12 +83,28 @@
 (is-condition (+ 1 3) NIL)
 (is-condition (error 'error) (make-condition 'error))
 
+(is (test-helper-proxy-arguments NIL) NIL)
+
+(is (decompose-single-argument 'a) 'a)
+(is (decompose-single-argument '(a 5)) 'a)
+
+(is (decompose-function-arguments NIL) '(NIL NIL NIL NIL))
+(is (decompose-function-arguments '(a b &optional c d &key e f &rest h))
+    '((a b) (c d) (e f) (h)))
+(is (decompose-function-arguments '(a b &optional (c 5) d &key e (f 4 g) &rest h))
+    '((a b) (c d) (e f) (h)))
+
+(is (test-helper-proxy-arguments '()) '())
+(is (test-helper-proxy-arguments '(a b &optional c d &key (e 5) &rest f)) '(a b c d :e e f))
+
 (is (macroexpand-1 '(test-helper-call foo bar baz))
     '(foo bar baz :raw-test (foo bar baz)))
 
-; what if :raw-test is already specified?
 (is (macroexpand-1 '(test-helper-call foo bar baz))
     '(foo bar baz :raw-test (foo bar baz)))
+
+(is (macroexpand-1 '(test-helper-call foo bar baz :raw-test blah))
+    '(foo bar baz :raw-test blah))
 
 ; bring in pattern-match so that we can match the gensyms
 (require "pattern-match.lisp")
