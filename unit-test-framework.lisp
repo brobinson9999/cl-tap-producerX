@@ -130,9 +130,10 @@ purpose: Consumes a list of arguments from a function declaration, and produces 
   (let ((decomposed-arguments (decompose-function-arguments in-args)))
     (append (first decomposed-arguments)
 	    (second decomposed-arguments)
-	    (if (third decomposed-arguments) (list '&key)) ; TODO This needs to be :key value, not &key
-	    (third decomposed-arguments)
-	    (fourth decomposed-arguments)))) ; erm, rest isn't going to work here, I need to convert rest into a regular parameter.
+	    (reduce #'append (map 'list (lambda (argument)
+					  (list (intern (symbol-name argument) (symbol-package :key)) argument))
+				  (third decomposed-arguments)))
+	    (fourth decomposed-arguments))))
 
 (defun decompose-single-argument (in-arg)
   "decompose-single-argument: (union symbol list) -> symbol
@@ -163,11 +164,13 @@ purpose: Consumes an argument from a function declaration and produces the name 
   "test-helper-call: any* -> any
 purpose: generates a list form containing the body of the macro call, with an added keyword parameter raw-test containing the body of the list form, excluding that additional parameter.
 example: (test-helper-call foo bar baz) -> (foo bar baz :raw-test '(foo bar baz))"
-  (append body (list :raw-test body)))
+  (if (member :raw-test body)
+      body
+      (append body (list :raw-test body))))
 
 (defmacro def-test-helper (name parameter-list &rest body)
   "def-test-helper: symbol (listof argument) any* -> macro-definition
-purpose: declares a function to be a test helper. Behaves similar to defun, but behind the scenes creates a macro instead which will call an inner function which has the behavior of the original function, but takes an additional raw-test keyword parameter. This probably does not maintain the 'supplied' flag on optional or keyword parameters."
+purpose: declares a function to be a test helper. Behaves similar to defun, but behind the scenes creates a macro instead which will call an inner function which has the behavior of the original function, but takes an additional raw-test keyword parameter. This probably does not maintain the 'supplied' flag on optional or keyword parameters. Probably does not work properly on cases with &rest."
   (let ((gen-name (gensym)))
     `(progn
        (defmacro ,name ,parameter-list

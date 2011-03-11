@@ -95,10 +95,7 @@
     '((a b) (c d) (e f) (h)))
 
 (is (test-helper-proxy-arguments '()) '())
-(is (test-helper-proxy-arguments '(a b &optional c d &key (e 5) &rest f)) '(a b c d :e e f))
-
-(is (macroexpand-1 '(test-helper-call foo bar baz))
-    '(foo bar baz :raw-test (foo bar baz)))
+(is (test-helper-proxy-arguments '(a b &optional c d &key (e 5) &rest f g)) '(a b c d :e e f g))
 
 (is (macroexpand-1 '(test-helper-call foo bar baz))
     '(foo bar baz :raw-test (foo bar baz)))
@@ -118,7 +115,6 @@
         test))
     :compare-sym 'match)
 
-; this case still does not work
 (is (macroexpand-1 '(def-test-helper foo (bar &key (nub NIL)) baz test))
     '(progn
       (defmacro foo (bar &key (nub NIL))
@@ -128,6 +124,6 @@
         test))
     :compare-sym 'match)
 
-; needs more testing, and probably doesn't work on cases with &rest
+; probably doesn't work on cases with &rest
 
 (print-test-plan)
