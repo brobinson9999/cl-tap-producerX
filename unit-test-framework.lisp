@@ -106,7 +106,7 @@ purpose: defines methods for equiv:object-constituents. Each equiv entry consist
 		    equiv-entries))))
 
 (defequivs
-    (('symbol) (list #'identity))
+    (('symbol) (list #'symbol-name #'symbol-package))
     (('error) (list #'type-of))
   (('simple-error) (list #'type-of (lambda (x) (format NIL "~a" x)))))
 

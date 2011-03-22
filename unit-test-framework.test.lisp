@@ -28,6 +28,9 @@
       (defmethod equiv:object-constituents ((type (eql 'amajig)))
 	(load-time-value (list #'magic-comparison)))))
 
+(is (check-equivalence 'foo 'bar) NIL)
+(is (check-equivalence 'foo 'foo) T)
+
 (is (add-to-plist-if-nonexistent :a 'b '()) '(:a b))
 (is (add-to-plist-if-nonexistent :a 'b '(:c d)) '(:a b :c d))
 (is (add-to-plist-if-nonexistent :a 'b '(:a d)) '(:a d))
