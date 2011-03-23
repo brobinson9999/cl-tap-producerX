@@ -5,7 +5,9 @@ cl-tap-producerX (latest as of 26 Apr 2010)
   The latest code from this project should be available at:
   http://github.com/brobinson9999/cl-tap-producerX
 
-  cl-tap-producerX is a simple testing framework which produces test results in the Test Anything Protocol (TAP) format. It is not yet very mature but provides basic functionality. The most common usage is to print the TAP output to standard output, for use with tools such as the Perl prove utility.
+  cl-tap-producerX is a testing library for Common Lisp which produces test results in the Test Anything Protocol (TAP) format. The most common usage is to print the TAP output to standard output, for use with tools such as the Perl prove utility, but other usages are possible. cl-tap-producerX supports most parts of the TAP specification, including TODO tests, skipped tests, and diagnostics. cl-tap-producerX automatically infers diagnostics in the most common usages. cl-tap-producerX is extremely light-weight with almost no boilerplate required in the most common usage scenario. Boilerplate is available for those who prefer it.
+
+  cl-tap-producerX is split into two parts - a test library which generates structured test result data, and a TAP producer which formats the structured test data to TAP output. In the most common usage, this process is transparent.
 
 Dependencies
   cl-tap-producerX has no external dependencies.
