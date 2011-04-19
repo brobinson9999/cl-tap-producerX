@@ -1,3 +1,4 @@
+(load "plist-utils.lisp")
 (load "split-sequence.lisp")
 
 ; a structured-test is a plist. The following properties are recognized:
@@ -91,12 +92,6 @@ purpose: produces T if the input string starts with a space, otherwise produces 
     ((eql (length input-text) 0) NIL)
     ((char= (elt input-text 0) #\Space) T)
     (T NIL)))
-
-(defun plist-contains-p (input-plist desired-key)
-  "plist-contains-p: plist any -> bool
-purpose: produces T if the input plist contains a key matching the second parameter, otherwise produces NIL."
-  (loop for plist-key in input-plist by #'cddr do (when (eql plist-key desired-key) (return-from plist-contains-p T)))
-  NIL)
 
 (defvar *report-test-index* 0)
 (defun next-test-index ()

@@ -15,4 +15,6 @@
 	   :is
 	   :is-condition
 	   :capture-condition
-	   :compare-plists))
+; now in plist-utils.lisp
+;	   :compare-plists
+))
