@@ -8,6 +8,7 @@
 	   :structured-test-list->tap
 	   :structured-test->tap
 	   :print-test-plan
+	   :format-test-value
 	   ; test framework
 	   :check
 	   :combine-results

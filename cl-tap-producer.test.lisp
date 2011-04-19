@@ -65,6 +65,10 @@
    (is (get-diagnostic-text `(:test-value "foundthis" :expected-value "wantedthis"))
        (format NIL "found: \"foundthis\"~%wanted: \"wantedthis\""))
 
+   (is (format-test-value NIL) "NIL")
+   (is (format-test-value 5) "5")
+   (is (format-test-value "test") "\"test\"")
+
    (is (structured-test->tap '(:test-passed T :test-name "test" :test-value T :expected-value T))
        (format NIL "ok 8 test~%  found: T~%  wanted: T"))
    (is (structured-test->tap '(:test-passed NIL :test-name "test" :test-value T :expected-value T))

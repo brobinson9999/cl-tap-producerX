@@ -48,20 +48,26 @@ purpose: produces a string containing a part of a report on the test passed in, 
 	  (format NIL "~%~a" (start-all-lines-with-whitespace diagnostic-text :always-add-whitespace T)) ""))))
 
 (defun get-diagnostic-text (test-result)
-  "get-diagnostic-text: structured-test -> string
+  :documentation "get-diagnostic-text: structured-test -> string
 purpose: produces a string containing the diagnostic text, in the TAP format, for the test that is passed in."
   (format NIL "~{~a~^~&~}"
     (remove NIL (list
       (if (plist-contains-p test-result :test-value)
-        (format NIL "found: ~S" (getf test-result :test-value)))
+        (format NIL "found: ~a" (format-test-value (getf test-result :test-value))))
       (if (plist-contains-p test-result :expected-value)
-        (format NIL "wanted: ~S" (getf test-result :expected-value)))
+        (format NIL "wanted: ~a" (format-test-value (getf test-result :expected-value))))
       (if (plist-contains-p test-result :raw-test)
         (format NIL "raw_test: ~S" (getf test-result :raw-test)))
       (if (plist-contains-p test-result :compare-sym)
         (format NIL "compare-sym: ~a" (getf test-result :compare-sym)))
       (if (plist-contains-p test-result :compare-fun)
         (format NIL "compare-fun: ~S" (getf test-result :compare-fun)))))))
+
+(defgeneric format-test-value (test-value)
+  (:documentation "format-test-value: any -> string
+purpose: consumes a value, either a test result or an expected result, and produces a string describing it.")
+  (:method (test-value)
+    (format NIL "~S" test-value)))
 
 (defun start-all-lines-with-whitespace (input-text &key (always-add-whitespace NIL))
   "start-all-lines-with-whitespace: string -> string
