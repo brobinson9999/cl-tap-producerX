@@ -75,13 +75,21 @@
 (is (check-equivalence (make-condition 'error) (make-condition 'error)) T)
 (is (check-equivalence (make-condition 'error) (make-condition 'condition)) NIL)
 
-(is (capture-condition (+ 5 3)) NIL)
-(is (capture-condition (+ 5 3) (* 10 3)) NIL)
+(is (capture-condition-or (+ 5 3)) 8)
+(is (capture-condition-or (+ 5 3) (* 10 3)) 30)
 (let ((my-condition (make-condition 'error)))
-  (is (capture-condition (signal my-condition)) my-condition))
+  (is (capture-condition-or (signal my-condition)) my-condition))
 
-(is (capture-condition (error 'error)) (make-condition 'error))
-(is (capture-condition (+ 5 3) (error 'error) (* 10 3)) (make-condition 'error))
+(is (capture-condition-or (error 'error)) (make-condition 'error))
+(is (capture-condition-or (+ 5 3) (error 'error) (* 10 3)) (make-condition 'error))
+
+(is (capture-condition-only (+ 5 3)) NIL)
+(is (capture-condition-only (+ 5 3) (* 10 3)) NIL)
+(let ((my-condition (make-condition 'error)))
+  (is (capture-condition-only (signal my-condition)) my-condition))
+
+(is (capture-condition-only (error 'error)) (make-condition 'error))
+(is (capture-condition-only (+ 5 3) (error 'error) (* 10 3)) (make-condition 'error))
 
 (is-condition (+ 1 3) NIL)
 (is-condition (error 'error) (make-condition 'error))
