@@ -25,13 +25,13 @@ purpose: produces a list of structured-test results from forms. If a form produc
   "combine-results: (listof structured-test)* -> (listof structured-test)
 purpose: appends all of the passed in lists of structured-tests and produces the combined list of structured-tests."
   `(append ,@forms))
-  
+
 (defmacro deftest (name parameters &body body)
   "deftest: any (listof parameter) any* -> any
-purpose: as defun but maintains a call stack in the *test-name* dynamic variable."
+purpose: as defun but maintains a call stack in the *test-name* dynamic variable. If macros are present, they will be expanded each time."
   `(defun ,name ,parameters
     (let ((*test-name* (append *test-name* (list ',name))))
-      ,@body)))
+      (eval '(progn ,@body)))))
 
 (defvar *report-func* NIL)
 (defun report-immediately-if-at-top-level (test-result)

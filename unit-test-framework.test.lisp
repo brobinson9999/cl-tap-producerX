@@ -7,6 +7,11 @@
 ; I will just set the cl-tap-producerX as the current package for convenience.
 (in-package :cl-tap-producerX)
 
+(is (macroexpand-1 '(deftest foo () (check (= (+ 1 2) 3))))
+    '(defun foo ()
+      (let ((*test-name* (append *test-name* (list 'foo))))
+	(eval '(progn (check (= (+ 1 2) 3)))))))
+
 (is (macroexpand-1 '(defequivs
 		     (('error 'simple-error) (list #'type-of #'describe))))
     '(progn

@@ -25,6 +25,8 @@ Usage
 
   The other method is to use test expressions directly. If test expresions are evaluated outside the context of a deftest form, the result will be printed to standard output automatically. If you use this method, you may also wish to call print-test-plan at the end of all testing to print the test plan to standard output. The test plan is not required as part of the TAP standard but many TAP consumers, including prove, behave better if it is present.
 
+  NOTE: The forms inside of a deftest are stored quoted, and eval'd each time, so if they contain macros the macros will be re-expanded each time the tests are run. Tests declared using is at top level are not guaranteed to have that behaviour.
+
   mw-equiv:object= is used by default for comparisons. See mw-equiv-0.1.3/doc/index.html for details on how to alter the way objects are compared. It is also possible to supply a keyword parameter :compare-fun or :compare-sym to change the function used for comparisons.
 
   See example.test.lisp, arithmetic.test.lisp, unit-test-framework.test.lisp and cl-tap-producer.test.lisp for usage examples.
